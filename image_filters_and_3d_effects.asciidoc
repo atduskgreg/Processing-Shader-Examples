@@ -1,0 +1,217 @@
+== Image Filters and 3D Effects with GLSL by Andres Colubri
+
+=== On the CPU
+
+* define geometry
+* beginShape() etc
+* define vertices:
+** vertex coords
+** colors
+** connectivity
+** normals
+** texturecoords
+** textures
+  
+=== On the GPU
+
+* GOAL: convert geometry into pixels
+* Vertex Shader:
+** convert coordinates to screen space
+** takes 3D geometry and outputs 2D geometry
+* Fragment/Pixel shader:
+** converts 2D geometry to an array of pixels: rasterization
+** blending algorithms
+** lighting is applied
+** leads to final pixel color
+* GPU is highly parallel
+** can draw every pixel simultaneously
+** GPU has many cores, hundreds
+** NVidia 5706TX has 512 cores
+
+=== Play with Shaders in Processing
+
+* Andres' GLGraphics library: http://glgraphics.sourceforge.net
+** works with Processing 1.5x not 2.0
+* GLGraphics > Examples > Textures > BasicUse, etc.
+
+=== Use Shaders for 2D Image Effects/Post-processing
+* Send an image to the GPU
+** as a textured quad:
+
+----
+beginShape(QUAD);
+  texture(...);
+  vertex(...);
+  vertex(...);
+  vertex(...);
+  vertex(...);
+endShape();
+----
+
+* draw the quad covering the whole screen
+* using orthographic projection
+* the vertex shader does nothing: "trivial"
+* the pixel shader is the interesting part
+** does a texture lookup to get the color of each pixel
+** can apply transformations per pixel
+** custom transformation is written in GLSL
+* result of shader operations gets copied into a new texture
+** has to be a new texture or you get problems
+** use ping-pong technique of swapping back and forth between two textures on alternating frames
+
+=== Actually Writing Shaders
+
+* glsl file w/an XML filter file for GLGraphics
+** filter file combines vertex/fragment shaders and declares parameters
+
+* example of swapping red and green component of an image on the cpu:
+
+----
+PImage img;
+PImage dest;
+
+void setup(){
+  size(1600,600, JAVA2D);
+  frameRate(180);
+  
+  img = loadImage("landscape.jpg");
+  img.loadPixels();
+  
+  dest = createImage(800, 600, RGB);
+  dest.loadPixels();
+}
+
+void draw(){
+    for(int i = 0; i < img.width * img.height; i++){
+      color c = img.pixels[i];
+      dest.pixels[i] = color(green(c), red(c), blue(c), alpha(c));
+    }
+    
+        
+    
+    image(img, 0,0);
+    image(dest,800,0);
+    
+    println(frameRate);
+}
+----
+
+* Equivalent example on the GPU:
+
+----
+import processing.opengl.*;
+import codeanticode.glgraphics.*;
+
+GLTexture texSource;
+GLTexture texDestination;
+
+GLTextureFilter colorSwap;
+
+void setup(){
+  size(1600, 600, GLConstants.GLGRAPHICS);
+  frameRate(180);
+  
+  texSource = new GLTexture(this, "landscape.jpg");
+  texDestination = new GLTexture(this, texSource.width, texSource.height);
+  colorSwap = new GLTextureFilter(this, "colorSwap.xml");
+}
+
+void draw(){
+  colorSwap.apply(texSource, texDestination);
+  // synonym: 
+  // texSource.filter(colorSwap, texDestination);
+  
+  image(texSource, 0,0);
+  image(texDestination, 800,0);
+  
+  println(frameRate);
+}
+----
+
+* With a filter file ("colorSwap.xml") that looks like this:
+
+----
+<filter name="colorSwap">
+  <description>Reverse red and green components of each pixel</description>
+  <fragment>colorSwap.glsl</fragment>
+  <textures input="1" output="1"></textures>
+</filter>
+----
+
+* and a fragment shader ("colorSwap.glsl") that looks like this:
+
+----
+uniform sampler2D src_tex_unit0;
+
+void main(void){
+  // get the location of the current pixel
+  // in the input texture
+  vec2 tex_coord = gl_TexCoord[0].st;
+  
+  // read the color of the current pixel out of the 
+  // input texture
+  vec4 src_color = texture2D(src_tex_unit0, tex_coord).rgba;
+  
+  // output:
+  // set color of the fragment
+  gl_FragColor = vec4(src_color.g, src_color.r, src_color.b, src_color.a);
+}
+----
+
+* GPU version runs 6 times faster at least
+* now, passing arguments into the shader
+** in draw() add calls to setParameterValue()
+
+----
+void draw(){
+  // NEW LINES: pass arguments into the shader
+  colorSwap.setParameterValue("scaledMouseX", map(mouseX, 0, width, 0, 1));
+  colorSwap.setParameterValue("scaledMouseY", map(mouseY, 0, height, 0, 1));
+  
+  colorSwap.apply(texSource, texDestination);
+  // synonym: 
+  // texSource.filter(colorSwap, texDestination);
+  
+  image(texSource, 0,0);
+  image(texDestination, 800,0);
+  
+  println(frameRate);
+}
+
+----
+
+** pass these parameters through in the xml:
+
+----
+<filter name="colorSwap">
+  <description>Reverse red and green components of each pixel</description>
+  <fragment>colorSwap.glsl</fragment>
+  <textures input="1" output="1"></textures>
+  <parameters>
+    <parameter type="float" name="scaledMouseX" label="">1</parameter>
+    <parameter type="float" name="scaledMouseY" label="">1</parameter>
+  </parameters>
+</filter>
+----
+
+** and use them in the shader:
+
+----
+uniform sampler2D src_tex_unit0;
+uniform float scaledMouseX;
+uniform float scaledMouseY;
+
+void main(void){
+  // get the location of the current pixel
+  // in the input texture
+  vec2 tex_coord = gl_TexCoord[0].st;
+  
+  // read the color of the current pixel out of the 
+  // input texture
+  vec4 src_color = texture2D(src_tex_unit0, tex_coord).rgba;
+  
+  // output:
+  // set color of the fragment
+  gl_FragColor = vec4(src_color.g * scaledMouseX, src_color.r * scaledMouseY, src_color.b, src_color.a);
+}
+----

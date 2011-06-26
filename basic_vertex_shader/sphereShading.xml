@@ -1,5 +1,0 @@
-<filter name="sphereShading">
-  <description>Apply standard smooth shading to a sphere</description>
-  <vertex>sphereShading.glsl</vertex>
-  <textures input="1" output="1"></textures>
-</filter>

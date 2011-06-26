@@ -1,0 +1,11 @@
+= Processing Shader Examples
+
+== Introduction
+
+Welcome to Processing Shader Examples! This is where I try to learn about shaders using Processing and the Processing GLGraphics library (http://glgraphics.sourceforge.net/) and record my experiments and the lessons I learn. Each sub-directory of this repo includes a shader example written in Processing along with a description.asciidoc file with notes about that particular example. I've also included all of the description files in this readme for convenience.
+
+Right now, I'm mainly working from Graphics Shaders: Theory and Practice by Mike Bailey and Steve Cunningham (http://www.amazon.com/Graphics-Shaders-Practice-Mike-Bailey/dp/1568813341). Andres Colubri, author of the GLGraphics library, was an enormous help in getting started especially a session he taught at ITP Camp 2011 on the topic of Image Processing with Shaders in Processing. I've included the notes from that session here as well. It acts as a kind of introduction to the rest of this material, so we begin with it.
+
+include::image_filters_and_3d_effects.asciidoc[]
+
+include::basic_vertex_shader/description.asciidoc[]

@@ -1,0 +1,1095 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.1//EN"
+    "http://www.w3.org/TR/xhtml11/DTD/xhtml11.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en">
+<head>
+<meta http-equiv="Content-Type" content="application/xhtml+xml; charset=UTF-8" />
+<meta name="generator" content="AsciiDoc 8.6.4" />
+<title>Processing Shader Examples</title>
+<style type="text/css">
+/* Sans-serif font. */
+h1, h2, h3, h4, h5, h6,
+div.title, caption.title,
+thead, p.table.header,
+div#toctitle,
+span#author, span#revnumber, span#revdate, span#revremark,
+div#footer {
+  font-family: Arial,Helvetica,sans-serif;
+}
+
+/* Serif font. */
+div.sectionbody {
+  font-family: Georgia,"Times New Roman",Times,serif;
+}
+
+/* Monospace font. */
+tt {
+  font-size: inherit;
+}
+
+body {
+  margin: 1em 5% 1em 5%;
+}
+
+a {
+  color: blue;
+  text-decoration: underline;
+}
+a:visited {
+  color: fuchsia;
+}
+
+em {
+  font-style: italic;
+  color: navy;
+}
+
+strong {
+  font-weight: bold;
+  color: #083194;
+}
+
+tt {
+  font-size: inherit;
+  color: navy;
+}
+
+h1, h2, h3, h4, h5, h6 {
+  color: #527bbd;
+  margin-top: 1.2em;
+  margin-bottom: 0.5em;
+  line-height: 1.3;
+}
+
+h1, h2, h3 {
+  border-bottom: 2px solid silver;
+}
+h2 {
+  padding-top: 0.5em;
+}
+h3 {
+  float: left;
+}
+h3 + * {
+  clear: left;
+}
+
+div.sectionbody {
+  margin-left: 0;
+}
+
+hr {
+  border: 1px solid silver;
+}
+
+p {
+  margin-top: 0.5em;
+  margin-bottom: 0.5em;
+}
+
+ul, ol, li > p {
+  margin-top: 0;
+}
+ul > li     { color: #aaa; }
+ul > li > * { color: black; }
+
+pre {
+  padding: 0;
+  margin: 0;
+}
+
+span#author {
+  color: #527bbd;
+  font-weight: bold;
+  font-size: 1.1em;
+}
+span#email {
+}
+span#revnumber, span#revdate, span#revremark {
+}
+
+div#footer {
+  font-size: small;
+  border-top: 2px solid silver;
+  padding-top: 0.5em;
+  margin-top: 4.0em;
+}
+div#footer-text {
+  float: left;
+  padding-bottom: 0.5em;
+}
+div#footer-badges {
+  float: right;
+  padding-bottom: 0.5em;
+}
+
+div#preamble {
+  margin-top: 1.5em;
+  margin-bottom: 1.5em;
+}
+div.tableblock, div.imageblock, div.exampleblock, div.verseblock,
+div.quoteblock, div.literalblock, div.listingblock, div.sidebarblock,
+div.admonitionblock {
+  margin-top: 1.0em;
+  margin-bottom: 1.5em;
+}
+div.admonitionblock {
+  margin-top: 2.0em;
+  margin-bottom: 2.0em;
+  margin-right: 10%;
+  color: #606060;
+}
+
+div.content { /* Block element content. */
+  padding: 0;
+}
+
+/* Block element titles. */
+div.title, caption.title {
+  color: #527bbd;
+  font-weight: bold;
+  text-align: left;
+  margin-top: 1.0em;
+  margin-bottom: 0.5em;
+}
+div.title + * {
+  margin-top: 0;
+}
+
+td div.title:first-child {
+  margin-top: 0.0em;
+}
+div.content div.title:first-child {
+  margin-top: 0.0em;
+}
+div.content + div.title {
+  margin-top: 0.0em;
+}
+
+div.sidebarblock > div.content {
+  background: #ffffee;
+  border: 1px solid #dddddd;
+  border-left: 4px solid #f0f0f0;
+  padding: 0.5em;
+}
+
+div.listingblock > div.content {
+  border: 1px solid #dddddd;
+  border-left: 5px solid #f0f0f0;
+  background: #f8f8f8;
+  padding: 0.5em;
+}
+
+div.quoteblock, div.verseblock {
+  padding-left: 1.0em;
+  margin-left: 1.0em;
+  margin-right: 10%;
+  border-left: 5px solid #f0f0f0;
+  color: #777777;
+}
+
+div.quoteblock > div.attribution {
+  padding-top: 0.5em;
+  text-align: right;
+}
+
+div.verseblock > pre.content {
+  font-family: inherit;
+  font-size: inherit;
+}
+div.verseblock > div.attribution {
+  padding-top: 0.75em;
+  text-align: left;
+}
+/* DEPRECATED: Pre version 8.2.7 verse style literal block. */
+div.verseblock + div.attribution {
+  text-align: left;
+}
+
+div.admonitionblock .icon {
+  vertical-align: top;
+  font-size: 1.1em;
+  font-weight: bold;
+  text-decoration: underline;
+  color: #527bbd;
+  padding-right: 0.5em;
+}
+div.admonitionblock td.content {
+  padding-left: 0.5em;
+  border-left: 3px solid #dddddd;
+}
+
+div.exampleblock > div.content {
+  border-left: 3px solid #dddddd;
+  padding-left: 0.5em;
+}
+
+div.imageblock div.content { padding-left: 0; }
+span.image img { border-style: none; }
+a.image:visited { color: white; }
+
+dl {
+  margin-top: 0.8em;
+  margin-bottom: 0.8em;
+}
+dt {
+  margin-top: 0.5em;
+  margin-bottom: 0;
+  font-style: normal;
+  color: navy;
+}
+dd > *:first-child {
+  margin-top: 0.1em;
+}
+
+ul, ol {
+    list-style-position: outside;
+}
+ol.arabic {
+  list-style-type: decimal;
+}
+ol.loweralpha {
+  list-style-type: lower-alpha;
+}
+ol.upperalpha {
+  list-style-type: upper-alpha;
+}
+ol.lowerroman {
+  list-style-type: lower-roman;
+}
+ol.upperroman {
+  list-style-type: upper-roman;
+}
+
+div.compact ul, div.compact ol,
+div.compact p, div.compact p,
+div.compact div, div.compact div {
+  margin-top: 0.1em;
+  margin-bottom: 0.1em;
+}
+
+div.tableblock > table {
+  border: 3px solid #527bbd;
+}
+thead, p.table.header {
+  font-weight: bold;
+  color: #527bbd;
+}
+tfoot {
+  font-weight: bold;
+}
+td > div.verse {
+  white-space: pre;
+}
+p.table {
+  margin-top: 0;
+}
+/* Because the table frame attribute is overriden by CSS in most browsers. */
+div.tableblock > table[frame="void"] {
+  border-style: none;
+}
+div.tableblock > table[frame="hsides"] {
+  border-left-style: none;
+  border-right-style: none;
+}
+div.tableblock > table[frame="vsides"] {
+  border-top-style: none;
+  border-bottom-style: none;
+}
+
+
+div.hdlist {
+  margin-top: 0.8em;
+  margin-bottom: 0.8em;
+}
+div.hdlist tr {
+  padding-bottom: 15px;
+}
+dt.hdlist1.strong, td.hdlist1.strong {
+  font-weight: bold;
+}
+td.hdlist1 {
+  vertical-align: top;
+  font-style: normal;
+  padding-right: 0.8em;
+  color: navy;
+}
+td.hdlist2 {
+  vertical-align: top;
+}
+div.hdlist.compact tr {
+  margin: 0;
+  padding-bottom: 0;
+}
+
+.comment {
+  background: yellow;
+}
+
+.footnote, .footnoteref {
+  font-size: 0.8em;
+}
+
+span.footnote, span.footnoteref {
+  vertical-align: super;
+}
+
+#footnotes {
+  margin: 20px 0 20px 0;
+  padding: 7px 0 0 0;
+}
+
+#footnotes div.footnote {
+  margin: 0 0 5px 0;
+}
+
+#footnotes hr {
+  border: none;
+  border-top: 1px solid silver;
+  height: 1px;
+  text-align: left;
+  margin-left: 0;
+  width: 20%;
+  min-width: 100px;
+}
+
+div.colist td {
+  padding-right: 0.5em;
+  padding-bottom: 0.3em;
+  vertical-align: top;
+}
+div.colist td img {
+  margin-top: 0.3em;
+}
+
+@media print {
+  div#footer-badges { display: none; }
+}
+
+div#toc {
+  margin-bottom: 2.5em;
+}
+
+div#toctitle {
+  color: #527bbd;
+  font-size: 1.1em;
+  font-weight: bold;
+  margin-top: 1.0em;
+  margin-bottom: 0.1em;
+}
+
+div.toclevel1, div.toclevel2, div.toclevel3, div.toclevel4 {
+  margin-top: 0;
+  margin-bottom: 0;
+}
+div.toclevel2 {
+  margin-left: 2em;
+  font-size: 0.9em;
+}
+div.toclevel3 {
+  margin-left: 4em;
+  font-size: 0.9em;
+}
+div.toclevel4 {
+  margin-left: 6em;
+  font-size: 0.9em;
+}
+
+span.aqua { color: aqua; }
+span.black { color: black; }
+span.blue { color: blue; }
+span.fuchsia { color: fuchsia; }
+span.gray { color: gray; }
+span.green { color: green; }
+span.lime { color: lime; }
+span.maroon { color: maroon; }
+span.navy { color: navy; }
+span.olive { color: olive; }
+span.purple { color: purple; }
+span.red { color: red; }
+span.silver { color: silver; }
+span.teal { color: teal; }
+span.white { color: white; }
+span.yellow { color: yellow; }
+
+span.aqua-background { background: aqua; }
+span.black-background { background: black; }
+span.blue-background { background: blue; }
+span.fuchsia-background { background: fuchsia; }
+span.gray-background { background: gray; }
+span.green-background { background: green; }
+span.lime-background { background: lime; }
+span.maroon-background { background: maroon; }
+span.navy-background { background: navy; }
+span.olive-background { background: olive; }
+span.purple-background { background: purple; }
+span.red-background { background: red; }
+span.silver-background { background: silver; }
+span.teal-background { background: teal; }
+span.white-background { background: white; }
+span.yellow-background { background: yellow; }
+
+span.big { font-size: 2em; }
+span.small { font-size: 0.6em; }
+</style>
+<script type="text/javascript">
+/*<![CDATA[*/
+window.onload = function(){asciidoc.footnotes(); asciidoc.toc(2);}
+var asciidoc = {  // Namespace.
+
+/////////////////////////////////////////////////////////////////////
+// Table Of Contents generator
+/////////////////////////////////////////////////////////////////////
+
+/* Author: Mihai Bazon, September 2002
+ * http://students.infoiasi.ro/~mishoo
+ *
+ * Table Of Content generator
+ * Version: 0.4
+ *
+ * Feel free to use this script under the terms of the GNU General Public
+ * License, as long as you do not remove or alter this notice.
+ */
+
+ /* modified by Troy D. Hanson, September 2006. License: GPL */
+ /* modified by Stuart Rackham, 2006, 2009. License: GPL */
+
+// toclevels = 1..4.
+toc: function (toclevels) {
+
+  function getText(el) {
+    var text = "";
+    for (var i = el.firstChild; i != null; i = i.nextSibling) {
+      if (i.nodeType == 3 /* Node.TEXT_NODE */) // IE doesn't speak constants.
+        text += i.data;
+      else if (i.firstChild != null)
+        text += getText(i);
+    }
+    return text;
+  }
+
+  function TocEntry(el, text, toclevel) {
+    this.element = el;
+    this.text = text;
+    this.toclevel = toclevel;
+  }
+
+  function tocEntries(el, toclevels) {
+    var result = new Array;
+    var re = new RegExp('[hH]([2-'+(toclevels+1)+'])');
+    // Function that scans the DOM tree for header elements (the DOM2
+    // nodeIterator API would be a better technique but not supported by all
+    // browsers).
+    var iterate = function (el) {
+      for (var i = el.firstChild; i != null; i = i.nextSibling) {
+        if (i.nodeType == 1 /* Node.ELEMENT_NODE */) {
+          var mo = re.exec(i.tagName);
+          if (mo && (i.getAttribute("class") || i.getAttribute("className")) != "float") {
+            result[result.length] = new TocEntry(i, getText(i), mo[1]-1);
+          }
+          iterate(i);
+        }
+      }
+    }
+    iterate(el);
+    return result;
+  }
+
+  var toc = document.getElementById("toc");
+  var entries = tocEntries(document.getElementById("content"), toclevels);
+  for (var i = 0; i < entries.length; ++i) {
+    var entry = entries[i];
+    if (entry.element.id == "")
+      entry.element.id = "_toc_" + i;
+    var a = document.createElement("a");
+    a.href = "#" + entry.element.id;
+    a.appendChild(document.createTextNode(entry.text));
+    var div = document.createElement("div");
+    div.appendChild(a);
+    div.className = "toclevel" + entry.toclevel;
+    toc.appendChild(div);
+  }
+  if (entries.length == 0)
+    toc.parentNode.removeChild(toc);
+},
+
+
+/////////////////////////////////////////////////////////////////////
+// Footnotes generator
+/////////////////////////////////////////////////////////////////////
+
+/* Based on footnote generation code from:
+ * http://www.brandspankingnew.net/archive/2005/07/format_footnote.html
+ */
+
+footnotes: function () {
+  var cont = document.getElementById("content");
+  var noteholder = document.getElementById("footnotes");
+  var spans = cont.getElementsByTagName("span");
+  var refs = {};
+  var n = 0;
+  for (i=0; i<spans.length; i++) {
+    if (spans[i].className == "footnote") {
+      n++;
+      // Use [\s\S] in place of . so multi-line matches work.
+      // Because JavaScript has no s (dotall) regex flag.
+      note = spans[i].innerHTML.match(/\s*\[([\s\S]*)]\s*/)[1];
+      noteholder.innerHTML +=
+        "<div class='footnote' id='_footnote_" + n + "'>" +
+        "<a href='#_footnoteref_" + n + "' title='Return to text'>" +
+        n + "</a>. " + note + "</div>";
+      spans[i].innerHTML =
+        "[<a id='_footnoteref_" + n + "' href='#_footnote_" + n +
+        "' title='View footnote' class='footnote'>" + n + "</a>]";
+      var id =spans[i].getAttribute("id");
+      if (id != null) refs["#"+id] = n;
+    }
+  }
+  if (n == 0)
+    noteholder.parentNode.removeChild(noteholder);
+  else {
+    // Process footnoterefs.
+    for (i=0; i<spans.length; i++) {
+      if (spans[i].className == "footnoteref") {
+        var href = spans[i].getElementsByTagName("a")[0].getAttribute("href");
+        href = href.match(/#.*/)[0];  // Because IE return full URL.
+        n = refs[href];
+        spans[i].innerHTML =
+          "[<a href='#_footnote_" + n +
+          "' title='View footnote' class='footnote'>" + n + "</a>]";
+      }
+    }
+  }
+}
+
+}
+/*]]>*/
+</script>
+</head>
+<body class="article">
+<div id="header">
+<h1>Processing Shader Examples</h1>
+<div id="toc">
+  <div id="toctitle">Table of Contents</div>
+  <noscript><p><b>JavaScript must be enabled in your browser to display the table of contents.</b></p></noscript>
+</div>
+</div>
+<div id="content">
+<div class="sect1">
+<h2 id="_introduction">Introduction</h2>
+<div class="sectionbody">
+<div class="paragraph"><p>Welcome to Processing Shader Examples! This is where I try to learn about shaders using Processing and the Processing GLGraphics library (<a href="http://glgraphics.sourceforge.net/">http://glgraphics.sourceforge.net/</a>) and record my experiments and the lessons I learn. Each sub-directory of this repo includes a shader example written in Processing along with a description.asciidoc file with notes about that particular example. I&#8217;ve also included all of the description files in this readme for convenience.</p></div>
+<div class="paragraph"><p>Right now, I&#8217;m mainly working from Graphics Shaders: Theory and Practice by Mike Bailey and Steve Cunningham (<a href="http://www.amazon.com/Graphics-Shaders-Practice-Mike-Bailey/dp/1568813341">http://www.amazon.com/Graphics-Shaders-Practice-Mike-Bailey/dp/1568813341</a>). Andres Colubri, author of the GLGraphics library, was an enormous help in getting started especially a session he taught at ITP Camp 2011 on the topic of Image Processing with Shaders in Processing. I&#8217;ve included the notes from that session here as well. It acts as a kind of introduction to the rest of this material, so we begin with it.</p></div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="_image_filters_and_3d_effects_with_glsl_by_andres_colubri">Image Filters and 3D Effects with GLSL by Andres Colubri</h2>
+<div class="sectionbody">
+<div class="sect2">
+<h3 id="_on_the_cpu">On the CPU</h3>
+<div class="ulist"><ul>
+<li>
+<p>
+define geometry
+</p>
+</li>
+<li>
+<p>
+beginShape() etc
+</p>
+</li>
+<li>
+<p>
+define vertices:
+</p>
+<div class="ulist"><ul>
+<li>
+<p>
+vertex coords
+</p>
+</li>
+<li>
+<p>
+colors
+</p>
+</li>
+<li>
+<p>
+connectivity
+</p>
+</li>
+<li>
+<p>
+normals
+</p>
+</li>
+<li>
+<p>
+texturecoords
+</p>
+</li>
+<li>
+<p>
+textures
+</p>
+</li>
+</ul></div>
+</li>
+</ul></div>
+</div>
+<div class="sect2">
+<h3 id="_on_the_gpu">On the GPU</h3>
+<div class="ulist"><ul>
+<li>
+<p>
+GOAL: convert geometry into pixels
+</p>
+</li>
+<li>
+<p>
+Vertex Shader:
+</p>
+<div class="ulist"><ul>
+<li>
+<p>
+convert coordinates to screen space
+</p>
+</li>
+<li>
+<p>
+takes 3D geometry and outputs 2D geometry
+</p>
+</li>
+</ul></div>
+</li>
+<li>
+<p>
+Fragment/Pixel shader:
+</p>
+<div class="ulist"><ul>
+<li>
+<p>
+converts 2D geometry to an array of pixels: rasterization
+</p>
+</li>
+<li>
+<p>
+blending algorithms
+</p>
+</li>
+<li>
+<p>
+lighting is applied
+</p>
+</li>
+<li>
+<p>
+leads to final pixel color
+</p>
+</li>
+</ul></div>
+</li>
+<li>
+<p>
+GPU is highly parallel
+</p>
+<div class="ulist"><ul>
+<li>
+<p>
+can draw every pixel simultaneously
+</p>
+</li>
+<li>
+<p>
+GPU has many cores, hundreds
+</p>
+</li>
+<li>
+<p>
+NVidia 5706TX has 512 cores
+</p>
+</li>
+</ul></div>
+</li>
+</ul></div>
+</div>
+<div class="sect2">
+<h3 id="_play_with_shaders_in_processing">Play with Shaders in Processing</h3>
+<div class="ulist"><ul>
+<li>
+<p>
+Andres' GLGraphics library: <a href="http://glgraphics.sourceforge.net">http://glgraphics.sourceforge.net</a>
+</p>
+<div class="ulist"><ul>
+<li>
+<p>
+works with Processing 1.5x not 2.0
+</p>
+</li>
+</ul></div>
+</li>
+<li>
+<p>
+GLGraphics &gt; Examples &gt; Textures &gt; BasicUse, etc.
+</p>
+</li>
+</ul></div>
+</div>
+<div class="sect2">
+<h3 id="_use_shaders_for_2d_image_effects_post_processing">Use Shaders for 2D Image Effects/Post-processing</h3>
+<div class="ulist"><ul>
+<li>
+<p>
+Send an image to the GPU
+</p>
+<div class="ulist"><ul>
+<li>
+<p>
+as a textured quad:
+</p>
+</li>
+</ul></div>
+</li>
+</ul></div>
+<div class="listingblock">
+<div class="content">
+<pre><tt>beginShape(QUAD);
+  texture(...);
+  vertex(...);
+  vertex(...);
+  vertex(...);
+  vertex(...);
+endShape();</tt></pre>
+</div></div>
+<div class="ulist"><ul>
+<li>
+<p>
+draw the quad covering the whole screen
+</p>
+</li>
+<li>
+<p>
+using orthographic projection
+</p>
+</li>
+<li>
+<p>
+the vertex shader does nothing: "trivial"
+</p>
+</li>
+<li>
+<p>
+the pixel shader is the interesting part
+</p>
+<div class="ulist"><ul>
+<li>
+<p>
+does a texture lookup to get the color of each pixel
+</p>
+</li>
+<li>
+<p>
+can apply transformations per pixel
+</p>
+</li>
+<li>
+<p>
+custom transformation is written in GLSL
+</p>
+</li>
+</ul></div>
+</li>
+<li>
+<p>
+result of shader operations gets copied into a new texture
+</p>
+<div class="ulist"><ul>
+<li>
+<p>
+has to be a new texture or you get problems
+</p>
+</li>
+<li>
+<p>
+use ping-pong technique of swapping back and forth between two textures on alternating frames
+</p>
+</li>
+</ul></div>
+</li>
+</ul></div>
+</div>
+<div class="sect2">
+<h3 id="_actually_writing_shaders">Actually Writing Shaders</h3>
+<div class="ulist"><ul>
+<li>
+<p>
+glsl file w/an XML filter file for GLGraphics
+</p>
+<div class="ulist"><ul>
+<li>
+<p>
+filter file combines vertex/fragment shaders and declares parameters
+</p>
+</li>
+</ul></div>
+</li>
+<li>
+<p>
+example of swapping red and green component of an image on the cpu:
+</p>
+</li>
+</ul></div>
+<div class="listingblock">
+<div class="content">
+<pre><tt>PImage img;
+PImage dest;
+
+void setup(){
+  size(1600,600, JAVA2D);
+  frameRate(180);
+
+  img = loadImage("landscape.jpg");
+  img.loadPixels();
+
+  dest = createImage(800, 600, RGB);
+  dest.loadPixels();
+}
+
+void draw(){
+    for(int i = 0; i &lt; img.width * img.height; i++){
+      color c = img.pixels[i];
+      dest.pixels[i] = color(green(c), red(c), blue(c), alpha(c));
+    }
+
+
+
+    image(img, 0,0);
+    image(dest,800,0);
+
+    println(frameRate);
+}</tt></pre>
+</div></div>
+<div class="ulist"><ul>
+<li>
+<p>
+Equivalent example on the GPU:
+</p>
+</li>
+</ul></div>
+<div class="listingblock">
+<div class="content">
+<pre><tt>import processing.opengl.*;
+import codeanticode.glgraphics.*;
+
+GLTexture texSource;
+GLTexture texDestination;
+
+GLTextureFilter colorSwap;
+
+void setup(){
+  size(1600, 600, GLConstants.GLGRAPHICS);
+  frameRate(180);
+
+  texSource = new GLTexture(this, "landscape.jpg");
+  texDestination = new GLTexture(this, texSource.width, texSource.height);
+  colorSwap = new GLTextureFilter(this, "colorSwap.xml");
+}
+
+void draw(){
+  colorSwap.apply(texSource, texDestination);
+  // synonym:
+  // texSource.filter(colorSwap, texDestination);
+
+  image(texSource, 0,0);
+  image(texDestination, 800,0);
+
+  println(frameRate);
+}</tt></pre>
+</div></div>
+<div class="ulist"><ul>
+<li>
+<p>
+With a filter file ("colorSwap.xml") that looks like this:
+</p>
+</li>
+</ul></div>
+<div class="listingblock">
+<div class="content">
+<pre><tt>&lt;filter name="colorSwap"&gt;
+  &lt;description&gt;Reverse red and green components of each pixel&lt;/description&gt;
+  &lt;fragment&gt;colorSwap.glsl&lt;/fragment&gt;
+  &lt;textures input="1" output="1"&gt;&lt;/textures&gt;
+&lt;/filter&gt;</tt></pre>
+</div></div>
+<div class="ulist"><ul>
+<li>
+<p>
+and a fragment shader ("colorSwap.glsl") that looks like this:
+</p>
+</li>
+</ul></div>
+<div class="listingblock">
+<div class="content">
+<pre><tt>uniform sampler2D src_tex_unit0;
+
+void main(void){
+  // get the location of the current pixel
+  // in the input texture
+  vec2 tex_coord = gl_TexCoord[0].st;
+
+  // read the color of the current pixel out of the
+  // input texture
+  vec4 src_color = texture2D(src_tex_unit0, tex_coord).rgba;
+
+  // output:
+  // set color of the fragment
+  gl_FragColor = vec4(src_color.g, src_color.r, src_color.b, src_color.a);
+}</tt></pre>
+</div></div>
+<div class="ulist"><ul>
+<li>
+<p>
+GPU version runs 6 times faster at least
+</p>
+</li>
+<li>
+<p>
+now, passing arguments into the shader
+</p>
+<div class="ulist"><ul>
+<li>
+<p>
+in draw() add calls to setParameterValue()
+</p>
+</li>
+</ul></div>
+</li>
+</ul></div>
+<div class="listingblock">
+<div class="content">
+<pre><tt>void draw(){
+  // NEW LINES: pass arguments into the shader
+  colorSwap.setParameterValue("scaledMouseX", map(mouseX, 0, width, 0, 1));
+  colorSwap.setParameterValue("scaledMouseY", map(mouseY, 0, height, 0, 1));
+
+  colorSwap.apply(texSource, texDestination);
+  // synonym:
+  // texSource.filter(colorSwap, texDestination);
+
+  image(texSource, 0,0);
+  image(texDestination, 800,0);
+
+  println(frameRate);
+}</tt></pre>
+</div></div>
+<div class="ulist"><ul>
+<li>
+<p>
+pass these parameters through in the xml:
+</p>
+</li>
+</ul></div>
+<div class="listingblock">
+<div class="content">
+<pre><tt>&lt;filter name="colorSwap"&gt;
+  &lt;description&gt;Reverse red and green components of each pixel&lt;/description&gt;
+  &lt;fragment&gt;colorSwap.glsl&lt;/fragment&gt;
+  &lt;textures input="1" output="1"&gt;&lt;/textures&gt;
+  &lt;parameters&gt;
+    &lt;parameter type="float" name="scaledMouseX" label=""&gt;1&lt;/parameter&gt;
+    &lt;parameter type="float" name="scaledMouseY" label=""&gt;1&lt;/parameter&gt;
+  &lt;/parameters&gt;
+&lt;/filter&gt;</tt></pre>
+</div></div>
+<div class="ulist"><ul>
+<li>
+<p>
+and use them in the shader:
+</p>
+</li>
+</ul></div>
+<div class="listingblock">
+<div class="content">
+<pre><tt>uniform sampler2D src_tex_unit0;
+uniform float scaledMouseX;
+uniform float scaledMouseY;
+
+void main(void){
+  // get the location of the current pixel
+  // in the input texture
+  vec2 tex_coord = gl_TexCoord[0].st;
+
+  // read the color of the current pixel out of the
+  // input texture
+  vec4 src_color = texture2D(src_tex_unit0, tex_coord).rgba;
+
+  // output:
+  // set color of the fragment
+  gl_FragColor = vec4(src_color.g * scaledMouseX, src_color.r * scaledMouseY, src_color.b, src_color.a);
+}</tt></pre>
+</div></div>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="_basic_vertex_shader">Basic Vertex Shader</h2>
+<div class="sectionbody">
+<div class="paragraph"><p>(Adapted for Processing from <a href="http://www.amazon.com/Graphics-Shaders-Practice-Mike-Bailey/dp/1568813341">http://www.amazon.com/Graphics-Shaders-Practice-Mike-Bailey/dp/1568813341</a>)</p></div>
+<div class="paragraph"><p>This example reproduces the standard lighting setup on a rotating cube using a vertex shader. It also includes a simple fragment shader</p></div>
+<div class="sect2">
+<h3 id="_initializing_shaders_directly_in_glgraphics">Initializing Shaders directly in GLGraphics</h3>
+<div class="paragraph"><p>You can work with shaders in GLGraphics without having to use an xml file. See line 9 of the sketch where the shader is declared with paths to the vertex and fragment shaders (relative to the sketch&#8217;s data directory):</p></div>
+<div class="listingblock">
+<div class="content">
+<pre><tt>vertexShader = new GLSLShader(this, "sphereShading.vert", "sphereShading.frag");</tt></pre>
+</div></div>
+</div>
+<div class="sect2">
+<h3 id="_glgraphics_renderer_causes_coordinate_confusion">GLGraphics Renderer Causes Coordinate Confusion</h3>
+<div class="paragraph"><p>If you use the GLGraphics renderer as is demonstrated in some of the GLGraphics examples, it will play havoc with pushMatrix(), popMatrix(), translate(), etc. You can still bind shaders for rendering without the GLGraphics renderer (see lines 23-25) thusly:</p></div>
+<div class="listingblock">
+<div class="content">
+<pre><tt>vertexShader.start();
+box(300);
+vertexShader.stop();</tt></pre>
+</div></div>
+</div>
+<div class="sect2">
+<h3 id="_a_vertex_shader_that_reproduces_standard_lighting">A Vertex Shader That Reproduces Standard Lighting</h3>
+<div class="paragraph"><p>The vertex shader is a bit complicated. All it&#8217;s really doing is reproducing the standard lighting model of OpenGL. It sets a fixed light position:</p></div>
+<div class="listingblock">
+<div class="content">
+<pre><tt>vec3 LightPos   = vec3(3., 5., 10.);</tt></pre>
+</div></div>
+<div class="paragraph"><p>then calculates the normals for every vertex:</p></div>
+<div class="listingblock">
+<div class="content">
+<pre><tt>vec3 transNorm  = normalize(gl_NormalMatrix * gl_Normal);</tt></pre>
+</div></div>
+<div class="paragraph"><p>and then uses the combination of those two to calculate the intensity of the light at every vertex (the dot product gives you the portion of the light vector hits the vertex along its normal, i.e. that actually shines on it):</p></div>
+<div class="listingblock">
+<div class="content">
+<pre><tt>vec3 ECposition = vec3(gl_ModelViewMatrix * gl_Vertex);
+LightIntensity  = dot(normalize( LightPos - ECposition ), transNorm);
+LightIntensity  = abs(LightIntensity);</tt></pre>
+</div></div>
+<div class="paragraph"><p>ECposition is the only confusing bit here. It represents the vertex coordinate transformed from world space to the coordinates of the current point of view. After it&#8217;s calculated this LightIntensity variable doesn&#8217;t get used until the fragment shader, where it&#8217;s multiplied by the pixel&#8217;s color to achieve the shading effect.</p></div>
+</div>
+<div class="sect2">
+<h3 id="_processing_8217_s_fill_sets_gl_color">Processing&#8217;s fill() sets gl_Color</h3>
+<div class="paragraph"><p>Any color you set with fill() in Processing will come through as the gl_Color in the vertex shader. The vertex shader has to declare color as a varying variable and set it based on gl_Color in order to pass it through to the fragment shader.</p></div>
+</div>
+<div class="sect2">
+<h3 id="_a_simple_fragment_shader">A Simple Fragment Shader</h3>
+<div class="paragraph"><p>The fragment shader here is incredibly simple, just one step above a pass-through. All it does is set the color of each pixel by multiplying the light intensity (as calculated in the vertex shader) by the color. All the pixels' alphas are set to 1 for fully opaque. The LightInensity and color are declared as varying variables come so they can come in from the vertex shader.</p></div>
+</div>
+</div>
+</div>
+</div>
+<div id="footnotes"><hr /></div>
+<div id="footer">
+<div id="footer-text">
+Last updated 2011-06-26 19:25:23 EDT
+</div>
+</div>
+</body>
+</html>

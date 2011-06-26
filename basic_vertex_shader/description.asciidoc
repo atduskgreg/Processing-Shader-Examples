@@ -4,18 +4,53 @@
 
 This example reproduces the standard lighting setup on a rotating cube using a vertex shader. It also includes a simple fragment shader 
 
-Things I learned while writing it:
 
-* You can work with shaders in GLGraphics without having to use an xml file. See line 9 of the sketch where the shader is declared with paths to the vertex and fragment shaders (relative to the sketch's data directory):
+=== Initializing Shaders directly in GLGraphics
+
+You can work with shaders in GLGraphics without having to use an xml file. See line 9 of the sketch where the shader is declared with paths to the vertex and fragment shaders (relative to the sketch's data directory):
 
 ----
 vertexShader = new GLSLShader(this, "sphereShading.vert", "sphereShading.frag");  
 ----
 
-* If you use the GLGraphics renderer as is demonstrated in some of the GLGraphics examples, it will play havoc with pushMatrix(), popMatrix(), translate(), etc. You can still bind shaders for rendering without the GLGraphics renderer (see lines 23-25) thusly:
+=== GLGraphics Renderer Causes Coordinate Confusion
+
+If you use the GLGraphics renderer as is demonstrated in some of the GLGraphics examples, it will play havoc with pushMatrix(), popMatrix(), translate(), etc. You can still bind shaders for rendering without the GLGraphics renderer (see lines 23-25) thusly:
 
 ----
 vertexShader.start();
 box(300);
 vertexShader.stop();
 ----
+
+=== A Vertex Shader That Reproduces Standard Lighting
+
+The vertex shader is a bit complicated. All it's really doing is reproducing the standard lighting model of OpenGL. It sets a fixed light position:
+
+----
+vec3 LightPos   = vec3(3., 5., 10.);
+----
+
+then calculates the normals for every vertex:
+
+----
+vec3 transNorm  = normalize(gl_NormalMatrix * gl_Normal);
+----
+
+and then uses the combination of those two to calculate the intensity of the light at every vertex (the dot product gives you the portion of the light vector hits the vertex along its normal, i.e. that actually shines on it):
+
+----
+vec3 ECposition = vec3(gl_ModelViewMatrix * gl_Vertex);
+LightIntensity  = dot(normalize( LightPos - ECposition ), transNorm); 
+LightIntensity  = abs(LightIntensity);
+----
+
+ECposition is the only confusing bit here. It represents the vertex coordinate transformed from world space to the coordinates of the current point of view. After it's calculated this LightIntensity variable doesn't get used until the fragment shader, where it's multiplied by the pixel's color to achieve the shading effect.
+
+=== Processing's fill() sets gl_Color
+
+Any color you set with fill() in Processing will come through as the gl_Color in the vertex shader. The vertex shader has to declare color as a varying variable and set it based on gl_Color in order to pass it through to the fragment shader.
+
+=== A Simple Fragment Shader
+
+The fragment shader here is incredibly simple, just one step above a pass-through. All it does is set the color of each pixel by multiplying the light intensity (as calculated in the vertex shader) by the color. All the pixels' alphas are set to 1 for fully opaque. The LightInensity and color are declared as varying variables come so they can come in from the vertex shader.
