@@ -1,0 +1,21 @@
+== Basic Vertex Shader
+
+(Adapted for Processing from http://www.amazon.com/Graphics-Shaders-Practice-Mike-Bailey/dp/1568813341)
+
+This example reproduces the standard lighting setup on a rotating cube using a vertex shader. It also includes a simple fragment shader 
+
+Things I learned while writing it:
+
+* You can work with shaders in GLGraphics without having to use an xml file. See line 9 of the sketch where the shader is declared with paths to the vertex and fragment shaders (relative to the sketch's data directory):
+
+----
+vertexShader = new GLSLShader(this, "sphereShading.vert", "sphereShading.frag");  
+----
+
+* If you use the GLGraphics renderer as is demonstrated in some of the GLGraphics examples, it will play havoc with pushMatrix(), popMatrix(), translate(), etc. You can still bind shaders for rendering without the GLGraphics renderer (see lines 23-25) thusly:
+
+----
+vertexShader.start();
+box(300);
+vertexShader.stop();
+----
