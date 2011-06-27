@@ -1,0 +1,54 @@
+== Interactive Inputs to a Shader
+
+This example shows how to pass interactive inputs into a shader from Processing. It builds off of the Basic Vertex Shader example above. It moves the position of the lighting source illuminating a sphere based on the position of the user's mouse.
+
+Code here: https://github.com/atduskgreg/Processing-Shader-Examples/tree/master/basic_vertex_shader_interactive. And reproduced in full after the notes.
+
+=== Set Uniforms in Processing
+
+"Uniform" variables in a shader are ones that will be the same for every vertex or fragment processed by the shader. Any variable coming in from outside the shaders, i.e. from user input, will inherently be the same for all vertices and fragments, hence they are all declared as uniforms inside the shader. GLGraphics provides a bunch of functions for setting these in Processing in the form of shader.setXXXUniform(), where XXX specifies the type of the variable being set, float, Vec, int, etc. Here we're using floats:
+
+----
+vertexShader.start();
+  vertexShader.setFloatUniform("mouseX", map(mouseX, 0, width, 0, 200));
+  vertexShader.setFloatUniform("mouseY", map(mouseY, 0, height, 200, 0));
+----
+
+The first argument here sets up the name of the uniform inside the shader. The second argument is the value. Note that it is very important that you call setFloatUniform() and its siblings between shader.start() and shader.end(). It will not work otherwise and the error will be obscure.
+
+=== Use Uniforms in the Shader
+
+Uniforms get declared like this in the shader (in this case in the vertex shader, sphereShading.vert):
+
+----
+uniform float mouseX;
+uniform float mouseY;
+----
+
+and then used like any other variable:
+
+----
+vec3 LightPos   = vec3(mouseX, mouseY, 10.);
+----
+
+In this case, we're using the x- and y-coordinates of the mouse to set the x- and y-coordinates of the light position, giving the illusion that the light source is following the user's mouse:
+
+image:basic_vertex_shader_interactive/user_controlled_light.jpg[]
+
+=== basic_vertex_shader_interactive.pde
+
+----
+include::basic_vertex_shader_interactive.pde[]
+----
+
+=== sphereShading.vert
+
+----
+include::sphereShading.vert[]
+----
+
+=== sphereShading.frag
+
+----
+include::sphereShading.frag[]
+----
