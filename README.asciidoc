@@ -9,3 +9,5 @@ Right now, I'm mainly working from Graphics Shaders: Theory and Practice by Mike
 include::image_filters_and_3d_effects.asciidoc[]
 
 include::basic_vertex_shader/description.asciidoc[]
+
+include::basic_vertex_shader_interactive/description.asciidoc[]
