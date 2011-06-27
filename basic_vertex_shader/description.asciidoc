@@ -57,17 +57,17 @@ The fragment shader here is incredibly simple, just one step above a pass-throug
 === basic_vertex_shader.pde
 
 ----
-include::basic_vertex_shader/basic_vertex_shader.pde[]
+include::basic_vertex_shader.pde[]
 ----
 
 === sphereShading.vert
 
 ----
-include::basic_vertex_shader/sphereShading.vert[]
+include::sphereShading.vert[]
 ----
 
 === sphereShading.frag
 
 ----
-include::basic_vertex_shader/sphereShading.frag[]
+include::sphereShading.frag[]
 ----
