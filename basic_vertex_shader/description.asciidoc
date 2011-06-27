@@ -1,5 +1,7 @@
 == Basic Vertex Shader
 
+Code here: https://github.com/atduskgreg/Processing-Shader-Examples/tree/master/basic_vertex_shader
+
 (Adapted for Processing from http://www.amazon.com/Graphics-Shaders-Practice-Mike-Bailey/dp/1568813341)
 
 This example reproduces the standard lighting setup on a rotating cube using a vertex shader. It also includes a simple fragment shader 
