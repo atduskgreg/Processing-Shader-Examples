@@ -4,6 +4,10 @@ This example reproduces the standard lighting setup on a rotating cube using a v
 
 Code here: https://github.com/atduskgreg/Processing-Shader-Examples/tree/master/basic_vertex_shader. And reproduced in full after the notes.
 
+When running it looks like this:
+
+image:spinning_cube.jpg[]
+
 === Initializing Shaders directly in GLGraphics
 
 You can work with shaders in GLGraphics without having to use an xml file. See line 9 of the sketch where the shader is declared with paths to the vertex and fragment shaders (relative to the sketch's data directory):
