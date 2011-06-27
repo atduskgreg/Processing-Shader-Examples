@@ -1,11 +1,8 @@
 == Basic Vertex Shader
 
-Code here: https://github.com/atduskgreg/Processing-Shader-Examples/tree/master/basic_vertex_shader
+This example reproduces the standard lighting setup on a rotating cube using a vertex shader. It also includes a simple fragment shader.
 
-(Adapted for Processing from http://www.amazon.com/Graphics-Shaders-Practice-Mike-Bailey/dp/1568813341)
-
-This example reproduces the standard lighting setup on a rotating cube using a vertex shader. It also includes a simple fragment shader 
-
+Code here: https://github.com/atduskgreg/Processing-Shader-Examples/tree/master/basic_vertex_shader. And reproduced in full after the notes.
 
 === Initializing Shaders directly in GLGraphics
 
@@ -56,3 +53,21 @@ Any color you set with fill() in Processing will come through as the gl_Color in
 === A Simple Fragment Shader
 
 The fragment shader here is incredibly simple, just one step above a pass-through. All it does is set the color of each pixel by multiplying the light intensity (as calculated in the vertex shader) by the color. All the pixels' alphas are set to 1 for fully opaque. The LightInensity and color are declared as varying variables come so they can come in from the vertex shader.
+
+=== basic_vertex_shader.pde
+
+----
+include::basic_vertex_shader/basic_vertex_shader.pde[]
+----
+
+=== sphereShading.vert
+
+----
+include::basic_vertex_shader/sphereShading.vert[]
+----
+
+=== sphereShading.frag
+
+----
+include::basic_vertex_shader/sphereShading.frag[]
+----
