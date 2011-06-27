@@ -2,7 +2,7 @@
 
 == Introduction
 
-Welcome to Processing Shader Examples! This is where I try to learn about shaders using Processing and the Processing GLGraphics library (http://glgraphics.sourceforge.net/) and record my experiments and the lessons I learn. Each sub-directory of this repo includes a shader example written in Processing along with a description.asciidoc file with notes about that particular example. I've also included all of the description files in this readme for convenience.
+Welcome to Processing Shader Examples! This is where I try to learn about shaders using Processing and the Processing GLGraphics library (http://glgraphics.sourceforge.net/) and record my experiments and the lessons I learn. The repo for this project is here: https://github.com/atduskgreg/Processing-Shader-Examples Each sub-directory of this repo includes a shader example written in Processing along with a description.asciidoc file with notes about that particular example. I've also included all of the description files in this README for convenience (though that doesn't seem to actually work on the project homepage in GitHub; if you're reading this there, head to http://atduskgreg.github.com/Processing-Shader-Examples to see the real version).
 
 Right now, I'm mainly working from Graphics Shaders: Theory and Practice by Mike Bailey and Steve Cunningham (http://www.amazon.com/Graphics-Shaders-Practice-Mike-Bailey/dp/1568813341). Andres Colubri, author of the GLGraphics library, was an enormous help in getting started especially a session he taught at ITP Camp 2011 on the topic of Image Processing with Shaders in Processing. I've included the notes from that session here as well. It acts as a kind of introduction to the rest of this material, so we begin with it.
 
