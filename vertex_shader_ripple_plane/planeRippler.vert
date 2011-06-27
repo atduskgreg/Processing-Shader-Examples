@@ -1,5 +1,6 @@
 varying vec3 myColor;
 varying float LightIntensity;
+uniform float mouseX;
 
 void main(void){
   vec3 thisNorml;
@@ -10,7 +11,9 @@ void main(void){
   float thisX = thisPos.x;
   float thisY = thisPos.y;
   
-  thisPos.z = 0.3 * sin(thisX*thisX + thisY*thisY);
+  thisPos.z += mouseX * sin(thisX*thisX + thisY*thisY);
+  // alternately, "coordinate sizzling":
+  // thisPos.z += 20.0 * sin(dot(thisPos.xy, thisPos.xy));
   
   vec3 LightPos = vec3(0., 10., 0.);
   
