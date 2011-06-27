@@ -1,6 +1,6 @@
 == Basic Vertex Shader
 
-This example reproduces the standard lighting setup on a rotating cube using a vertex shader. It also includes a simple fragment shader.
+This example reproduces the standard lighting setup on a rotating cube using a vertex shader and a very simple fragment shader.
 
 Code here: https://github.com/atduskgreg/Processing-Shader-Examples/tree/master/basic_vertex_shader. And reproduced in full after the notes.
 
