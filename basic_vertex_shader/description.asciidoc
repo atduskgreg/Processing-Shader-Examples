@@ -6,7 +6,7 @@ Code here: https://github.com/atduskgreg/Processing-Shader-Examples/tree/master/
 
 When running it looks like this:
 
-image:spinning_cube.jpg[]
+image:basic_vertex_shader/spinning_cube.jpg[]
 
 === Initializing Shaders directly in GLGraphics
 
