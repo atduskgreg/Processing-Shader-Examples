@@ -13,12 +13,9 @@ void setup() {
 void draw() {
   background(0);
   fill(255, 255*0.5, 0);
-  //translate(width/2, height/2,0);
 
   vertexShader.start();
   vertexShader.setFloatUniform("mouseX", map(mouseX, 0, width, 0, 100));
-  // vertexShader.setFloatUniform("mouseY", map(mouseY, 0, height, 200, 0));
-
 
   beginShape(TRIANGLE_STRIP);
 
@@ -29,9 +26,8 @@ void draw() {
     vertex(startX, startY + (i * triangleHeight), (i * triangleHeight));
     vertex(startX + 400, startY + (i* triangleHeight ), (i * triangleHeight));
   }
-  endShape();
-
-
+  endShape(CLOSE);
+  
   vertexShader.stop();
 }
 
