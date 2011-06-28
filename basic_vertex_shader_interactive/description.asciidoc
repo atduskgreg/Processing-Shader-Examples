@@ -35,19 +35,21 @@ In this case, we're using the x- and y-coordinates of the mouse to set the x- an
 
 image:basic_vertex_shader_interactive/user_controlled_light.jpg[]
 
-=== basic_vertex_shader_interactive.pde
+=== Code
+
+==== basic_vertex_shader_interactive.pde
 
 ----
 include::basic_vertex_shader_interactive.pde[]
 ----
 
-=== sphereShading.vert
+==== sphereShading.vert
 
 ----
 include::sphereShading.vert[]
 ----
 
-=== sphereShading.frag
+==== sphereShading.frag
 
 ----
 include::sphereShading.frag[]

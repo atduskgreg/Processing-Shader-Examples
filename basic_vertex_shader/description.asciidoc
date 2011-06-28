@@ -58,19 +58,21 @@ Any color you set with fill() in Processing will come through as the gl_Color in
 
 The fragment shader here is incredibly simple, just one step above a pass-through. All it does is set the color of each pixel by multiplying the light intensity (as calculated in the vertex shader) by the color. All the pixels' alphas are set to 1 for fully opaque. The LightInensity and color are declared as varying variables come so they can come in from the vertex shader.
 
-=== basic_vertex_shader.pde
+=== Code
+
+==== basic_vertex_shader.pde
 
 ----
 include::basic_vertex_shader.pde[]
 ----
 
-=== sphereShading.vert
+==== sphereShading.vert
 
 ----
 include::sphereShading.vert[]
 ----
 
-=== sphereShading.frag
+==== sphereShading.frag
 
 ----
 include::sphereShading.frag[]

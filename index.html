@@ -1087,7 +1087,9 @@ LightIntensity  = abs(LightIntensity);</tt></pre>
 <div class="paragraph"><p>The fragment shader here is incredibly simple, just one step above a pass-through. All it does is set the color of each pixel by multiplying the light intensity (as calculated in the vertex shader) by the color. All the pixels' alphas are set to 1 for fully opaque. The LightInensity and color are declared as varying variables come so they can come in from the vertex shader.</p></div>
 </div>
 <div class="sect2">
-<h3 id="_basic_vertex_shader_pde">basic_vertex_shader.pde</h3>
+<h3 id="_code">Code</h3>
+<div class="sect3">
+<h4 id="_basic_vertex_shader_pde">basic_vertex_shader.pde</h4>
 <div class="listingblock">
 <div class="content">
 <pre><tt>import processing.opengl.*;
@@ -1119,8 +1121,8 @@ void draw() {
 }</tt></pre>
 </div></div>
 </div>
-<div class="sect2">
-<h3 id="_sphereshading_vert">sphereShading.vert</h3>
+<div class="sect3">
+<h4 id="_sphereshading_vert">sphereShading.vert</h4>
 <div class="listingblock">
 <div class="content">
 <pre><tt>varying vec4 color;
@@ -1138,8 +1140,8 @@ void main(void){
 }</tt></pre>
 </div></div>
 </div>
-<div class="sect2">
-<h3 id="_sphereshading_frag">sphereShading.frag</h3>
+<div class="sect3">
+<h4 id="_sphereshading_frag">sphereShading.frag</h4>
 <div class="listingblock">
 <div class="content">
 <pre><tt>varying vec4 color;
@@ -1150,6 +1152,7 @@ void main(void)
     gl_FragColor = vec4(LightIntensity * color.rgb, 1.);
 }</tt></pre>
 </div></div>
+</div>
 </div>
 </div>
 </div>
@@ -1188,7 +1191,9 @@ uniform float mouseY;</tt></pre>
 </span></p></div>
 </div>
 <div class="sect2">
-<h3 id="_basic_vertex_shader_interactive_pde">basic_vertex_shader_interactive.pde</h3>
+<h3 id="_code_2">Code</h3>
+<div class="sect3">
+<h4 id="_basic_vertex_shader_interactive_pde">basic_vertex_shader_interactive.pde</h4>
 <div class="listingblock">
 <div class="content">
 <pre><tt>import processing.opengl.*;
@@ -1219,8 +1224,8 @@ void draw() {
 }</tt></pre>
 </div></div>
 </div>
-<div class="sect2">
-<h3 id="_sphereshading_vert_2">sphereShading.vert</h3>
+<div class="sect3">
+<h4 id="_sphereshading_vert_2">sphereShading.vert</h4>
 <div class="listingblock">
 <div class="content">
 <pre><tt>varying vec4 color;
@@ -1240,8 +1245,8 @@ void main(void){
 }</tt></pre>
 </div></div>
 </div>
-<div class="sect2">
-<h3 id="_sphereshading_frag_2">sphereShading.frag</h3>
+<div class="sect3">
+<h4 id="_sphereshading_frag_2">sphereShading.frag</h4>
 <div class="listingblock">
 <div class="content">
 <pre><tt>varying vec4 color;
@@ -1256,10 +1261,151 @@ void main(void)
 </div>
 </div>
 </div>
+<div class="sect1">
+<h2 id="_using_a_vertex_shader_to_move_vertices">Using a Vertex Shader to Move Vertices</h2>
+<div class="sectionbody">
+<div class="paragraph"><p>This example uses the vertex shader to move the actual position of vertices rather than just their color. It also shows how to draw a plane using triangle strips in Processing. Thanks to Andres Colubri for help debugging!</p></div>
+<div class="paragraph"><p>Code here: <a href="https://github.com/atduskgreg/Processing-Shader-Examples/tree/master/vertex_shader_ripple_plane">https://github.com/atduskgreg/Processing-Shader-Examples/tree/master/vertex_shader_ripple_plane</a>. And reproduced in full after the notes.</p></div>
+<div class="paragraph"><p>When running it looks like this:</p></div>
+<div class="paragraph"><p><span class="image">
+<img src="vertex_shader_ripple_plane/vertex_shader_ripple_plane.jpg" alt="vertex_shader_ripple_plane/vertex_shader_ripple_plane.jpg" />
+</span></p></div>
+<div class="sect2">
+<h3 id="_altering_geometry_and_re_calculating_normals">Altering Geometry and Re-calculating Normals</h3>
+<div class="paragraph"><p>This shader moves the points on a plane up and down based on the position of the mouse. It calculates the Z position of each point as a kind of sine wave of the point&#8217;s position on the plane (multiplying by the mouseX position which is passed in as a uniform variable to make it interactive):</p></div>
+<div class="listingblock">
+<div class="content">
+<pre><tt>thisPos.z += mouseX * sin(thisX*thisX + thisY*thisY);</tt></pre>
+</div></div>
+<div class="paragraph"><p>Since this changes the angle of the vertex relative to the light source, we have to recalculate the vertex&#8217;s normals so that lighting will still work on it correctly:</p></div>
+<div class="listingblock">
+<div class="content">
+<pre><tt>thisNorml.x = 2. * 0.3 * thisX * cos(thisX*thisX + thisY*thisY);
+thisNorml.y = 2. * 0.3 * thisY * cos(thisX*thisX + thisY*thisY);
+thisNorml.z = 1.;</tt></pre>
+</div></div>
+</div>
+<div class="sect2">
+<h3 id="_coordinate_sizzling">Coordinate Sizzling</h3>
+<div class="paragraph"><p>In looking at this shader, Andrew suggested something I could do to make it more efficient. Instead of constantly accessing the x- and y-coordinates of the current vertex as separate variables, I could use a technique he called "coordinate sizzling" to access multiple of them at once.</p></div>
+<div class="paragraph"><p>Instead of doing something like this (what I currently do):</p></div>
+<div class="listingblock">
+<div class="content">
+<pre><tt>float thisX = thisPos.x;
+float thisY = thisPos.y;
+thisPos.z += mouseX * sin(thisX*thisX + thisY*thisY);</tt></pre>
+</div></div>
+<div class="paragraph"><p>I could do this:</p></div>
+<div class="listingblock">
+<div class="content">
+<pre><tt>thisPos.z += 20.0 * sin(dot(thisPos.xy, thisPos.xy)</tt></pre>
+</div></div>
+<div class="paragraph"><p>This second version accesses both the x- and y-coordinates simultaneously. Apparently, it&#8217;s more efficient.</p></div>
+</div>
+<div class="sect2">
+<h3 id="_drawing_a_plane_with_a_triangle_strip">Drawing a Plane with a Triangle Strip</h3>
+<div class="paragraph"><p>In introducing this shader example, Bailey and Cunningham say that they applied it to a quad defined "from -5 to 5 with 20 subdivisions". This was rather vague so I experimented a bit with Processing&#8217;s geometry options. Just drawing a simple four-vertex quad with "beginShape(QUADS)" didn&#8217;t work, the shader had no visible effect. So I tried again, this time with a TRIANGLE_STRIP. When I did that the shader started taking effect. Since it&#8217;s a vertex shader, it only operates on vertices, I guess, and so needed more vertices to manipulate. The distortion still seems a big, er, pointy, though so I think I&#8217;m not quite doing something right still. The illustration in the book had a nice ripples in water quality to it.</p></div>
+</div>
+<div class="sect2">
+<h3 id="_code_3">Code</h3>
+<div class="sect3">
+<h4 id="_vertex_shader_ripple_plane_pde">vertex_shader_ripple_plane.pde</h4>
+<div class="listingblock">
+<div class="content">
+<pre><tt>import processing.opengl.*;
+import codeanticode.glgraphics.*;
+
+GLSLShader vertexShader;
+
+void setup() {
+  size(800, 600, GLConstants.GLGRAPHICS);
+
+  vertexShader = new GLSLShader(this, "planeRippler.vert", "planeRippler.frag");
+  noStroke();
+}
+
+void draw() {
+  background(0);
+  fill(255, 255*0.5, 0);
+
+  vertexShader.start();
+  vertexShader.setFloatUniform("mouseX", map(mouseX, 0, width, 0, 100));
+
+  beginShape(TRIANGLE_STRIP);
+
+  for (int i =0; i &lt;11; i ++) {
+    float startX = width/2 - 200;
+    float startY =  height/4;
+    int triangleHeight = 20;
+    vertex(startX, startY + (i * triangleHeight), (i * triangleHeight));
+    vertex(startX + 400, startY + (i* triangleHeight ), (i * triangleHeight));
+  }
+  endShape(CLOSE);
+
+  vertexShader.stop();
+}</tt></pre>
+</div></div>
+</div>
+<div class="sect3">
+<h4 id="_planerippler_vert">planeRippler.vert</h4>
+<div class="listingblock">
+<div class="content">
+<pre><tt>varying vec3 myColor;
+varying float LightIntensity;
+uniform float mouseX;
+
+void main(void){
+  vec3 thisNorml;
+
+  vec4 thisPos = gl_Vertex;
+  myColor = gl_Color.rgb;
+
+  float thisX = thisPos.x;
+  float thisY = thisPos.y;
+
+  thisPos.z += mouseX * sin(thisX*thisX + thisY*thisY);
+  // alternately, "coordinate sizzling":
+  // thisPos.z += 20.0 * sin(dot(thisPos.xy, thisPos.xy));
+
+  vec3 LightPos = vec3(0., 10., 0.);
+
+  thisNorml.x = 2. * 0.3 * thisX * cos(thisX*thisX + thisY*thisY);
+  thisNorml.y = 2. * 0.3 * thisY * cos(thisX*thisX + thisY*thisY);
+  thisNorml.z = 1.;
+
+  vec3 myNorml = normalize(thisNorml);
+
+  vec3 ECpos = vec3(gl_ModelViewMatrix * thisPos);
+
+  LightIntensity = dot(normalize(LightPos - ECpos), myNorml);
+  LightIntensity = 0.3 + abs(LightIntensity);
+  LightIntensity = clamp(LightIntensity, 0., 1.);
+
+  gl_Position     = gl_ModelViewProjectionMatrix * thisPos;
+}</tt></pre>
+</div></div>
+</div>
+<div class="sect3">
+<h4 id="_planerippler_frag">planeRippler.frag</h4>
+<div class="listingblock">
+<div class="content">
+<pre><tt>varying vec3 myColor;
+varying float LightIntensity;
+
+void main(void)
+{
+    gl_FragColor = vec4(LightIntensity * myColor.rgb, 1.);
+}</tt></pre>
+</div></div>
+</div>
+</div>
+</div>
+</div>
+</div>
 <div id="footnotes"><hr /></div>
 <div id="footer">
 <div id="footer-text">
-Last updated 2011-06-26 21:11:48 EDT
+Last updated 2011-06-27 19:50:45 EDT
 </div>
 </div>
 </body>

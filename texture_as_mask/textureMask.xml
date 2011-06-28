@@ -1,0 +1,10 @@
+<filter name="textureMask">
+  <description>use a texture to disappear fragments on a sphere</description>
+  <fragment>textureMask.frag</fragment>
+  <vertex>textureMask.vert</vertex>
+  <textures input="1" output="0"></textures>
+  <parameters>
+    <parameter type="float" name="Density" label="">1</parameter>
+    <parameter type="float" name="Frequency" label="">1</parameter>
+  </parameters>
+</filter>
