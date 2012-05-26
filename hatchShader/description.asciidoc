@@ -1,0 +1,26 @@
+== Hatch Effect Shader
+
+This shader was ported by http://unlekker.net/[Marius Watz] from http://meshlab.sourceforge.net/[Meshlab]. 
+
+Currently, the vertex shader fails to successfully calculate the normal between the light and each vertex which makes the light appear to move around as the spheres spin. This is a bug.
+
+
+=== Code
+
+==== hatchShader.pde
+
+----
+include::hatchShader.pde[]
+----
+
+==== Hatch.vert
+
+----
+include::Hatch.vert[]
+----
+
+==== Hatch.frag
+
+----
+include::Hatch.frag[]
+----
