@@ -433,7 +433,7 @@ span.small { font-size: 0.6em; }
 </style>
 <script type="text/javascript">
 /*<![CDATA[*/
-window.onload = function(){asciidoc.footnotes(); asciidoc.toc(2);}
+window.onload = function(){asciidoc.footnotes();}
 var asciidoc = {  // Namespace.
 
 /////////////////////////////////////////////////////////////////////
@@ -568,10 +568,6 @@ footnotes: function () {
 <body class="article">
 <div id="header">
 <h1>Processing Shader Examples</h1>
-<div id="toc">
-  <div id="toctitle">Table of Contents</div>
-  <noscript><p><b>JavaScript must be enabled in your browser to display the table of contents.</b></p></noscript>
-</div>
 </div>
 <div id="content">
 <div class="sect1">
@@ -1401,11 +1397,191 @@ void main(void)
 </div>
 </div>
 </div>
+<div class="sect1">
+<h2 id="_hatch_effect_shader">Hatch Effect Shader</h2>
+<div class="sectionbody">
+<div class="paragraph"><p>This shader was ported by <a href="http://unlekker.net/">Marius Watz</a> from <a href="http://meshlab.sourceforge.net/">Meshlab</a>.</p></div>
+<div class="paragraph"><p>Currently, the vertex shader fails to successfully calculate the normal between the light and each vertex which makes the light appear to move around as the spheres spin. This is a bug.</p></div>
+<div class="sect2">
+<h3 id="_code_4">Code</h3>
+<div class="sect3">
+<h4 id="_hatchshader_pde">hatchShader.pde</h4>
+<div class="listingblock">
+<div class="content">
+<pre><tt>import processing.opengl.*;
+import codeanticode.glgraphics.*;
+
+GLSLShader vertexShader;
+
+void setup() {
+  size(800, 800, GLConstants.GLGRAPHICS);
+
+  vertexShader = new GLSLShader(this,
+  "Hatch.vert", "Hatch.frag");
+  noStroke();
+}
+
+float y = 0;
+
+void draw() {
+  background(0);
+  fill(255, 255*0.5, 0);
+
+    pointLight(100, 200, 100, 0, 1, 1);
+    pointLight(100, 200, 100, 0, 0, -1);
+
+  sphereDetail(60);
+  pushMatrix();
+  translate(width/2, height/2, 0);
+  rotateX(HALF_PI+(y+=0.02));
+  rotateY(y);
+
+  vertexShader.start();
+
+  vertexShader.setFloatUniform("frequency", map(mouseX, 0, width, 0.5, 3));
+  vertexShader.setFloatUniform("edgew", map(mouseY, 0, height, 0, 1));
+  vertexShader.setVecUniform("HatchDirection", 0, 0.5f, 0.5f);
+  vertexShader.setFloatUniform("Lightness", 0.2f);
+
+  scale(1.2);
+  translate(-100, 100, -50);
+  sphere(150);
+  translate(200, 0, 0);
+  sphere(150);
+  translate(-100, -200, 0);
+  sphere(150);
+  vertexShader.stop();
+
+  popMatrix();
+}</tt></pre>
+</div></div>
+</div>
+<div class="sect3">
+<h4 id="_hatch_vert">Hatch.vert</h4>
+<div class="listingblock">
+<div class="content">
+<pre><tt>/****************************************************************************
+* MeshLab                                                           o o     *
+* An extendible mesh processor                                    o     o   *
+*                                                                _   O  _   *
+* Copyright(C) 2005, 2009                                          \/)\/    *
+* Visual Computing Lab                                            /\/|      *
+* ISTI - Italian National Research Council                           |      *
+*                                                                    \      *
+* All rights reserved.                                                      *
+*                                                                           *
+* This program is free software; you can redistribute it and/or modify      *
+* it under the terms of the GNU General Public License as published by      *
+* the Free Software Foundation; either version 2 of the License, or         *
+* (at your option) any later version.                                       *
+*                                                                           *
+* This program is distributed in the hope that it will be useful,           *
+* but WITHOUT ANY WARRANTY; without even the implied warranty of            *
+* MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the             *
+* GNU General Public License (http://www.gnu.org/licenses/gpl.txt)          *
+* for more details.                                                         *
+*                                                                           *
+****************************************************************************/
+
+uniform vec3  HatchDirection;
+uniform float Lightness;
+
+varying vec3  ObjPos;
+varying float V;
+varying float LightIntensity;
+
+void main()
+{
+    ObjPos          = vec3(gl_Vertex) * 0.2;
+
+    vec3 pos        = vec3(gl_ModelViewMatrix * gl_Vertex);
+    vec3 tnorm      = normalize(gl_NormalMatrix * gl_Normal);
+    //vec3 lightVec   = normalize(LightPosition - pos);
+        vec3 lightVec =  normalize(vec3(gl_LightSource[0].position));
+
+    float grey = Lightness*dot (vec4(.333,.333,.333,0),gl_Color);
+        LightIntensity  = max(grey * dot(lightVec, tnorm), 0.0);
+        LightIntensity  = max(dot(lightVec, tnorm), 0.0);
+
+    //V = gl_MultiTexCoord0.t;  // try .s for vertical stripes
+        V =dot(vec3(gl_Vertex),HatchDirection);
+
+    gl_Position = ftransform();
+//    gl_FrontColor=gl_Color;
+}</tt></pre>
+</div></div>
+</div>
+<div class="sect3">
+<h4 id="_hatch_frag">Hatch.frag</h4>
+<div class="listingblock">
+<div class="content">
+<pre><tt>/****************************************************************************
+* MeshLab                                                           o o     *
+* An extendible mesh processor                                    o     o   *
+*                                                                _   O  _   *
+* Copyright(C) 2005, 2009                                          \/)\/    *
+* Visual Computing Lab                                            /\/|      *
+* ISTI - Italian National Research Council                           |      *
+*                                                                    \      *
+* All rights reserved.                                                      *
+*                                                                           *
+* This program is free software; you can redistribute it and/or modify      *
+* it under the terms of the GNU General Public License as published by      *
+* the Free Software Foundation; either version 2 of the License, or         *
+* (at your option) any later version.                                       *
+*                                                                           *
+* This program is distributed in the hope that it will be useful,           *
+* but WITHOUT ANY WARRANTY; without even the implied warranty of            *
+* MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the             *
+* GNU General Public License (http://www.gnu.org/licenses/gpl.txt)          *
+* for more details.                                                         *
+*                                                                           *
+****************************************************************************/
+
+uniform float frequency;
+uniform float edgew;            // width of smooth step
+
+varying vec3  ObjPos;               // object space coord (noisy)
+varying float V;                    // generic varying
+varying float LightIntensity;
+
+
+void main()
+{
+    float dp       = length(vec2(dFdx(V), dFdy(V)));
+    float logdp    = -log2(dp * 8.0);
+    float ilogdp   = floor(logdp);
+    float stripes  = exp2(ilogdp);
+
+    float sawtooth = fract((V ) * frequency * stripes);
+    float triangle = abs(2.0 * sawtooth - 1.0);
+
+    // adjust line width
+    float transition = logdp - ilogdp;
+
+    // taper ends
+    triangle = abs((1.0 + transition) * triangle - transition);
+
+
+    float edge0  = clamp(LightIntensity - edgew, 0.0, 1.0);
+    float edge1  = clamp(LightIntensity, 0.0, 1.0);
+    float square = 1.0 - smoothstep(edge0, edge1, triangle);
+
+// uncomment this line to get the original color instead of white
+ //  gl_FragColor = gl_Color * vec4(vec3(square), 1.0);
+
+   gl_FragColor =  vec4(vec3(square), 1.0);
+}</tt></pre>
+</div></div>
+</div>
+</div>
+</div>
+</div>
 </div>
 <div id="footnotes"><hr /></div>
 <div id="footer">
 <div id="footer-text">
-Last updated 2011-06-27 19:50:45 EDT
+Last updated 2012-05-25 20:34:09 EDT
 </div>
 </div>
 </body>
