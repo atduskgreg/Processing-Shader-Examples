@@ -1,0 +1,10 @@
+<filter name="image_clone">
+    <description>fast image clone blend technique</description>
+    <fragment>image_clone.frag</fragment>
+    <textures input="3" output="1"></textures>
+
+    <!-- <parameter type="int" name="k" label="blur reps">5</parameter>
+    <parameter type="float" name="imgWidth" label="source image width">0</parameter>
+    <parameter type="vec" name="direction" label="blur direction">1.0,0.0</parameter>-->
+
+</filter>

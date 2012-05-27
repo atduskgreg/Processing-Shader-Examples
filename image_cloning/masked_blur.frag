@@ -25,7 +25,7 @@ void main(void) {
     	}    	
 
 	}
-	    	gl_FragColor = img / float(samples);
+	gl_FragColor = img / float(samples);
 
 
 } 

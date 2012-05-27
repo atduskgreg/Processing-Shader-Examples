@@ -6,8 +6,11 @@ GLTexture background;
 GLTexture maskTex;
 
 GLTextureFilter maskedBlur;
+GLTextureFilter imageClone;
 
-GLTexture outputTex;
+GLTexture faceBlur;
+GLTexture backgroundBlur;
+GLTexture finalOutput;
 
 PGraphics mask;
 
@@ -17,19 +20,17 @@ int h = 480;
 void setup() {
   size(w * 2, h, GLConstants.GLGRAPHICS);
 
- // blurShader = new GLSLShader(this, "passthrough.vert", "masked_blur.frag"); 
- // cloneShader = new GLSLShader(this, "passthrough.vert", "clone.frag");  
-
- // face = loadImage("face.jpg");
-  //background = loadImage("background.jpg");
-
   face = new GLTexture(this, "face.jpg");
   background = new GLTexture(this, "background.jpg");
   maskTex = new GLTexture(this, w, h);
 
   maskedBlur = new GLTextureFilter(this, "masked_blur.xml");    
+  imageClone = new GLTextureFilter(this, "image_clone.xml");    
 
-  outputTex = new GLTexture(this, w,h);
+  faceBlur = new GLTexture(this, w,h);
+  backgroundBlur = new GLTexture(this, w,h);
+  finalOutput = new GLTexture(this, w,h);
+  
 
   mask = createGraphics(w, h, P2D);
   mask.beginDraw();
@@ -42,13 +43,12 @@ void setup() {
 
 }
 
-void maskedBlur(PImage src) {
+void maskedBlur(GLTexture src, GLTexture msk, GLTexture outputTex) {
   int k = 10;
   maskedBlur.setParameterValue("k", k);
   maskedBlur.setParameterValue("imgWidth", float(w));
   maskedBlur.setParameterValue("direction", new float[]{1.0, 0.0});
-  maskedBlur.apply(new GLTexture[]{face, maskTex}, outputTex);
-  image(outputTex, w, 0);
+  maskedBlur.apply(new GLTexture[]{src, msk}, outputTex);
 }
 
 
@@ -60,11 +60,12 @@ void draw() {
   image(face, w, 0);
   image(maskTex, 0, h);
   popMatrix();
-    maskedBlur(face);
+  
+  maskedBlur(face, maskTex, faceBlur);
+  maskedBlur(background, maskTex, backgroundBlur);
+    
+  imageClone.apply(new GLTexture[]{face, faceBlur, backgroundBlur}, finalOutput);
 
-  //outputTex.render(w,0);
-  //PGraphics blur = maskedBlur(face);
-
-  //image(blur, w, 0);
+  image(finalOutput,w,0);
 }
 
