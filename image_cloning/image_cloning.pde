@@ -47,25 +47,13 @@ void setup() {
 void maskedBlur(GLTexture src, GLTexture msk, GLTexture outputTex) {
   maskedBlur.setParameterValue("k", k);
   maskedBlur.setParameterValue("imgWidth", float(w));
-  maskedBlur.setParameterValue("direction", new float[] {
-    1.0, 0.0
-  }
-  );
-  maskedBlur.apply(new GLTexture[] {
-    src, msk
-  }
-  , buffer);
+  maskedBlur.setParameterValue("direction", new float[] {1.0, 0.0});
+  maskedBlur.apply(new GLTexture[] {src, msk}, buffer);
 
   maskedBlur.setParameterValue("k", k);
   maskedBlur.setParameterValue("imgWidth", float(w));
-  maskedBlur.setParameterValue("direction", new float[] {
-    0.0, 1.0
-  }
-  );
-  maskedBlur.apply(new GLTexture[] {
-    buffer, msk
-  }
-  , outputTex);
+  maskedBlur.setParameterValue("direction", new float[] {0.0, 1.0});
+  maskedBlur.apply(new GLTexture[] {buffer, msk}, outputTex);
 }
 
 void draw() {
@@ -88,7 +76,6 @@ void draw() {
 
   maskTex.putImage(mask);
 
-
   pushMatrix();
   scale(0.5);
   image(background, 0, 0);
@@ -98,14 +85,10 @@ void draw() {
   
   text("Top Left - Background Source\nTop Right - Foreground Source\nLeft - Mask\n\nUp/down arrows control strength ("+ k +")\nMouse controls position", 330, 260 );
 
-
   maskedBlur(positionedFace, maskTex, faceBlur);
   maskedBlur(background, maskTex, backgroundBlur);
 
-  imageClone.apply(new GLTexture[] {
-    positionedFace, faceBlur, backgroundBlur
-  }
-  , finalOutput);
+  imageClone.apply(new GLTexture[] {positionedFace, faceBlur, backgroundBlur}, finalOutput);
 
   image(finalOutput, w, 0);
 }
