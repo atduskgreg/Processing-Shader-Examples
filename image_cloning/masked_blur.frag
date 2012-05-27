@@ -6,17 +6,29 @@ uniform float imgWidth;
 
 void main(void) {
  	vec2 pos = gl_TexCoord[0].st;
- 	vec4 img = texture2D(src_tex_unit0, pos);
- 	vec4 msk = texture2D(src_tex_unit1, pos);
+ 	vec4 sum = texture2D(src_tex_unit0, pos);
 
     int samples = 1;
-    int i = 1;
+    int i;
 	for(i = 1; i < k; i++) {
 
-		vec2 currOffset = float(i) * vec2(1./imgWidth, 0);
+	vec2 normDirection;
 
- 		if(msk.r > 0.5){
-				img += 
+		if(direction.x == 1.){
+			 normDirection = vec2(1./imgWidth, 0);
+		} else {
+			 normDirection = vec2(0, 1./imgWidth);
+		}
+
+		vec2 currOffset = float(i) * normDirection;
+
+		vec4 leftMask = texture2D(src_tex_unit1, pos - currOffset);
+		vec4 rightMask = texture2D(src_tex_unit1, pos + currOffset);
+
+		bool valid = leftMask.r == 1. && rightMask.r == 1.;
+
+ 		if(valid){
+				sum += 
 					texture2D(src_tex_unit0, pos + currOffset) +
 					texture2D(src_tex_unit0, pos - currOffset);
 				samples += 2;
@@ -25,7 +37,7 @@ void main(void) {
     	}    	
 
 	}
-	gl_FragColor = img / float(samples);
+	gl_FragColor = sum / float(samples);
 
 
 } 
