@@ -1,0 +1,27 @@
+== Sharpen Shader
+
+This shader sharpens an image. http://farm8.staticflickr.com/7219/7336302418_01e54d7727.jpg[See the results]. It is also a good example of a simple use of a convolution kernel to modify an image, which is a common technique for image processing. Convolution kernels specify the amount of effect each pixel in the fragment's neighborhood should have on its final output value. For example, the kernel used here for sharpen is:
+
+----
+ 0 -1  0
+-1  5 -1
+ 0 -1  0
+----
+
+The pixel labeled "5" is the current pixel and the other values are the proportions of the surrounding pixels to use.
+
+_NOTE: It would be conventional (and superior for performance) to declare float arrays before the shader's main() function. However, that seems not to work on OSX, so this example sets the values of both of its necessary arrays inside of main() which is bad for performance, but works and is not a problem in this simple example._
+
+=== Code
+
+==== sharpen_shader.pde
+
+----
+include::sharpen_shader.pde[]
+----
+
+==== sharpen.frag
+
+----
+include::sharpen.frag[]
+----

@@ -14,4 +14,6 @@ include::basic_vertex_shader_interactive/description.asciidoc[]
 
 include::vertex_shader_ripple_plane/description.asciidoc[]
 
+include::sharpen_shader/description.asciidoc[]
+
 include::hatchShader/description.asciidoc[]
