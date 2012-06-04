@@ -1505,12 +1505,83 @@ void main() {
 </div>
 </div>
 <div class="sect1">
+<h2 id="_contrast_shader">Contrast Shader</h2>
+<div class="sectionbody">
+<div class="paragraph"><p>This shader adds or remove contrast from an image. See the results <a href="http://www.flickr.com/photos/unavoidablegrain/7336797536/in/photostream">here</a>. This shader could also be trivially modified to control the luminance of the image.</p></div>
+<div class="sect2">
+<h3 id="_code_5">Code</h3>
+<div class="sect3">
+<h4 id="_contrast_shader_pde">contrast_shader.pde</h4>
+<div class="listingblock">
+<div class="content">
+<pre><tt>import processing.opengl.*;
+import codeanticode.glgraphics.*;
+
+GLTexture face;
+GLTexture output;
+GLTextureFilter contrast;
+
+int w = 640;
+int h = 480;
+
+void setup() {
+  size(w * 2, h, GLConstants.GLGRAPHICS);
+
+  face = new GLTexture(this, "face.jpg");
+  output = new GLTexture(this, w, h);
+  contrast = new GLTextureFilter(this, "contrast.xml");
+}
+
+void draw() {
+  contrast.setParameterValue("imgWidth", float(w));
+  contrast.setParameterValue("imgHeight", float(h));
+  contrast.setParameterValue("contrast", map(mouseX, 0, w/2, 0, 1));
+  contrast.apply(face, output);
+  image(face, 0, 0);
+  image(output, w, 0);
+  fill(255);
+  text("mouse left-right to set contrast: " + map(mouseX, 0, w/2, 0, 1), 5, height-15);
+}</tt></pre>
+</div></div>
+</div>
+<div class="sect3">
+<h4 id="_contrast_frag">contrast.frag</h4>
+<div class="listingblock">
+<div class="content">
+<pre><tt>uniform sampler2D src_tex_unit0;
+uniform float imgWidth;
+uniform float imgHeight;
+uniform float contrast;
+
+float step_w = 1.0/imgWidth;
+float step_h = 1.0/imgHeight;
+
+void main() {
+        vec3 color = vec3(texture2D(src_tex_unit0, gl_TexCoord[0].st));
+        const vec3 LumCoeff = vec3(0.2125, 0.7154, 0.0721);
+
+        vec3 AvgLumin = vec3(0.5, 0.5, 0.5);
+
+        vec3 intensity = vec3(dot(color, LumCoeff));
+
+        // could substitute a uniform for this 1. and have variable saturation
+        vec3 satColor = mix(intensity, color, 1.);
+        vec3 conColor = mix(AvgLumin, satColor, contrast);
+
+        gl_FragColor = vec4(conColor, 1);
+}</tt></pre>
+</div></div>
+</div>
+</div>
+</div>
+</div>
+<div class="sect1">
 <h2 id="_hatch_effect_shader">Hatch Effect Shader</h2>
 <div class="sectionbody">
 <div class="paragraph"><p>This shader was ported by <a href="http://unlekker.net/">Marius Watz</a> from <a href="http://meshlab.sourceforge.net/">Meshlab</a>.</p></div>
 <div class="paragraph"><p>Currently, the vertex shader fails to successfully calculate the normal between the light and each vertex which makes the light appear to move around as the spheres spin. This is a bug.</p></div>
 <div class="sect2">
-<h3 id="_code_5">Code</h3>
+<h3 id="_code_6">Code</h3>
 <div class="sect3">
 <h4 id="_hatchshader_pde">hatchShader.pde</h4>
 <div class="listingblock">
@@ -1688,7 +1759,7 @@ void main()
 <div id="footnotes"><hr /></div>
 <div id="footer">
 <div id="footer-text">
-Last updated 2012-06-04 11:36:38 EDT
+Last updated 2012-06-04 12:53:56 EDT
 </div>
 </div>
 </body>
