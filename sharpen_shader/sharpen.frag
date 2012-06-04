@@ -1,6 +1,7 @@
 uniform sampler2D src_tex_unit0;
 uniform float imgWidth;
 uniform float imgHeight;
+uniform float stepSize;
 
 // NOTE: we should initialize these arrays up here
 // 		 but that syntax doesn't work on OSX for some reason
@@ -10,8 +11,8 @@ uniform float imgHeight;
 float kernel[9];
 vec2 offset[9];
 
-float step_w = 1.0/imgWidth;
-float step_h = 1.0/imgHeight;
+float step_w = stepSize/imgWidth;
+float step_h = stepSize/imgHeight;
 
 void main() {
 	offset[0] = vec2(-step_w, -step_h);

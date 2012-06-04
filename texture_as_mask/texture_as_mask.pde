@@ -12,7 +12,7 @@ GLTextureFilter textureMask;
 void setup() {
   size(800, 600, GLConstants.GLGRAPHICS);
 
- // vertexShader = new GLSLShader(this, "textureMask.vert", "textureMask.frag");  
+  vertexShader = new GLSShader(this, "textureMask.vert", "textureMask.frag");  
    noStroke();
   
   maskTexture = new GLTexture(this, "grid_texture.jpg");
