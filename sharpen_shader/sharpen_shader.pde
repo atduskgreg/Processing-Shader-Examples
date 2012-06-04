@@ -14,8 +14,6 @@ void setup() {
   face = new GLTexture(this, "face.jpg");
   output = new GLTexture(this, w, h);
   sharpen = new GLTextureFilter(this, "sharpen.xml");    
- 
-
 }
 
 void draw() {
