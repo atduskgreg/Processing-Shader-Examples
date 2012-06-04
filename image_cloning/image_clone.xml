@@ -1,0 +1,5 @@
+<filter name="image_clone">
+    <description>fast image clone blend technique</description>
+    <fragment>image_clone.frag</fragment>
+    <textures input="3" output="1"></textures>
+</filter>

@@ -17,8 +17,8 @@ void draw() {
   background(0);
   fill(255, 255*0.5, 0);
 
-    pointLight(100, 200, 100, 0, 1, 1);
-    pointLight(100, 200, 100, 0, 0, -1);
+  pointLight(100, 200, 100, 0, 1, 1);
+  pointLight(100, 200, 100, 0, 0, -1);
   
   sphereDetail(60);
   pushMatrix();

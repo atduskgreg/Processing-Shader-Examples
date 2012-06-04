@@ -1,0 +1,9 @@
+<filter name="masked_blur">
+    <description>masks a source texture with a mask texture</description>
+    <fragment>masked_blur.frag</fragment>
+    <textures input="2" output="1"></textures>
+    <parameter type="int" name="k" label="blur reps">5</parameter>
+    <parameter type="float" name="imgWidth" label="source image width">0</parameter>
+    <parameter type="vec" name="direction" label="blur direction">1.0,0.0</parameter>
+
+</filter>
