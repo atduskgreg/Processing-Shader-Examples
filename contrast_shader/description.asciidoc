@@ -1,0 +1,17 @@
+== Contrast Shader
+
+This shader adds or remove contrast from an image. See the results http://www.flickr.com/photos/unavoidablegrain/7336797536/in/photostream[here]. This shader could also be trivially modified to control the luminance of the image. 
+
+=== Code
+
+==== contrast_shader.pde
+
+----
+include::contrast_shader.pde[]
+----
+
+==== contrast.frag
+
+----
+include::contrast.frag[]
+----

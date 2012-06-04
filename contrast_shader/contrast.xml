@@ -1,0 +1,9 @@
+<filter name="sharpen">
+    <description>contrast an image</description>
+    <fragment>contrast.frag</fragment>
+    <textures input="1" output="1"></textures>
+    <parameter type="float" name="imgWidth" label="source image width">0</parameter>
+    <parameter type="float" name="imgHeight" label="source image height">0</parameter>
+        <parameter type="float" name="contrast" label="contrast">1.0</parameter>
+
+</filter>
